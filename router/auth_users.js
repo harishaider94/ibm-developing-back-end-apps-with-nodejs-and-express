@@ -34,9 +34,9 @@ regd_users.post("/register", (req,res) => {
   if (username && password) {
     if (!isValid(username)) { 
       users.push({"username":username,"password":password});
-      return res.status(200).json({message: "User successfully registred. Now you can login"});
+      return res.status(200).json({message: "Customer successfully registred. Now you can login"});
     } else {
-      return res.status(404).json({message: "User already exists!"});    
+      return res.status(404).json({message: "Customer already exists!"});    
     }
   } 
   return res.status(404).json({message: "Unable to register user."});
@@ -59,7 +59,7 @@ regd_users.post("/login", (req,res) => {
     req.session.authorization = {
       accessToken,username
   }
-  return res.status(200).send("User successfully logged in");
+  return res.status(200).send("Customer successfully logged in");
   } else {
     return res.status(208).json({message: "Invalid Login. Check username and password"});
   }
@@ -71,33 +71,31 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
     const isbn = req.params.isbn;
     let review = req.body.review;
     let reviews = {};
-    const filteredBooks = Object.keys(books).filter((key) => books[key].isbn === isbn);
-    if (!books[filteredBooks]) {
+    if (!books[isbn]) {
       res.status(404).json({ message: 'Book not found' });
     };
     const username = req.session.authorization.username;
-    reviews = books[filteredBooks].reviews;
+    reviews = books[isbn].reviews;
     reviews[username] = review;
-    Object.assign(books[filteredBooks].reviews,reviews);
-    const book = books[filteredBooks];  
-    res.send(book);
-});
+    Object.assign(books[isbn].reviews,reviews);
+    const book = books[isbn];  
+    return res.status(200).send("The review for the book with ISBN " + isbn + " has been added/updated");
+  });
 
 
 // Delete a book
 regd_users.delete("/auth/review/:isbn", (req, res) => {
   const isbn = req.params.isbn;
-  const filteredBooks = Object.keys(books).filter((key) => books[key].isbn === isbn);
-  if (!books[filteredBooks]) {
+  if (!books[isbn]) {
     res.status(404).json({ message: 'Book not found' });
   };
   const username = req.session.authorization.username;
-  if(books[filteredBooks].reviews[username] !== undefined)
-    delete books[filteredBooks].reviews[username];
+  if(books[isbn].reviews[username] !== undefined)
+    delete books[isbn].reviews[username];
  
-  const book = books[filteredBooks];  
+  const book = books[isbn];  
   
-  res.send(book);
+  return res.status(200).send("Review for the ISBN " + isbn + " posted by the customer " + username + " deleted");
 });
 
 module.exports.authenticated = regd_users;

@@ -26,13 +26,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{site_url}}books/isbn/123456789",
+					"raw": "{{site_url}}books/isbn/1",
 					"host": [
 						"{{site_url}}books"
 					],
 					"path": [
 						"isbn",
-						"123456789"
+						"1"
 					]
 				}
 			},
@@ -80,13 +80,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{site_url}}books/review/123456789",
+					"raw": "{{site_url}}books/review/1",
 					"host": [
 						"{{site_url}}books"
 					],
 					"path": [
 						"review",
-						"123456789"
+						"1"
 					]
 				}
 			},
@@ -159,14 +159,14 @@
 					}
 				},
 				"url": {
-					"raw": "{{site_url}}customer/auth/review/123456789",
+					"raw": "{{site_url}}customer/auth/review/1",
 					"host": [
 						"{{site_url}}customer"
 					],
 					"path": [
 						"auth",
 						"review",
-						"123456789"
+						"1"
 					]
 				}
 			},
@@ -187,14 +187,14 @@
 					}
 				},
 				"url": {
-					"raw": "{{site_url}}customer/auth/review/123456789",
+					"raw": "{{site_url}}customer/auth/review/1",
 					"host": [
 						"{{site_url}}customer"
 					],
 					"path": [
 						"auth",
 						"review",
-						"123456789"
+						"1"
 					]
 				}
 			},
@@ -223,13 +223,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{site_url}}books/isbn-2/123456789",
+					"raw": "{{site_url}}books/isbn-2/1",
 					"host": [
 						"{{site_url}}books"
 					],
 					"path": [
 						"isbn-2",
-						"123456789"
+						"1"
 					]
 				}
 			},

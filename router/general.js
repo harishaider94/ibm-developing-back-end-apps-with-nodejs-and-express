@@ -5,12 +5,12 @@ const public_users = express.Router();
 
 // Get the book list available in the shop
 public_users.get('/',function (req, res) {
-  res.send(JSON.stringify(books,null,4));
+  res.send({"books" : books});
 });
 
 public_users.get('/all', function (req, res) {
   new Promise((resolve, reject) => {
-    resolve(JSON.stringify(books, null, 4));
+    resolve({"books" : books});
   })
     .then((result) => {
       res.send(result);
@@ -27,8 +27,7 @@ public_users.get('/all', function (req, res) {
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
   const isbn = req.params.isbn;
-  const filteredBooks = Object.keys(books).filter((key) => books[key].isbn === isbn);
-  const book = books[filteredBooks];  
+  const book = books[isbn];  
     if (book) {
       res.send(book);
     } else {
@@ -39,8 +38,7 @@ public_users.get('/isbn/:isbn',function (req, res) {
  public_users.get('/isbn-2/:isbn',function (req, res) {
   new Promise((resolve, reject) => {
     const isbn = req.params.isbn;
-    const filteredBooks = Object.keys(books).filter((key) => books[key].isbn === isbn);
-    const book = books[filteredBooks];  
+    const book = books[isbn];  
     resolve(book);
   })
     .then((result) => {
@@ -119,8 +117,7 @@ public_users.get('/title-2/:title',function (req, res) {
 //  Get book review
 public_users.get('/review/:isbn',function (req, res) {
   const isbn = req.params.isbn;
-  const filteredBooks = Object.keys(books).filter((key) => books[key].isbn === isbn);
-  const book = books[filteredBooks];  
+  const book = books[isbn];  
     if (book) {
       res.send(book.reviews);
     } else {

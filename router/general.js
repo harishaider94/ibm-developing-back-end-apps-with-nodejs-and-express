@@ -2,6 +2,29 @@ const express = require('express');
 let books = require("./booksdb.js");
 const public_users = express.Router();
 
+function getSimilarBooks(author, title) {
+  const similarBooks = [];
+  let isbn = 1;
+  for (const book of Object.values(books)) { 
+    if (book.author === author) {
+      similarBooks.push({
+        "isbn" : isbn,
+        "title" : book.title,
+        "reviews" : book.reviews
+      });
+    }
+    if (book.title === title) {
+      similarBooks.push({
+        "isbn" : isbn,
+        "author" : book.author,
+        "reviews" : book.reviews
+      });
+    }
+    isbn++;
+  }
+
+  return similarBooks;
+}
 
 // Get the book list available in the shop
 public_users.get('/',function (req, res) {
@@ -55,21 +78,19 @@ public_users.get('/isbn/:isbn',function (req, res) {
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
   const author = req.params.author;
-  const filteredBooks = Object.keys(books).filter((key) => books[key].author === author);
-  const book = books[filteredBooks];  
-    if (book) {
-      res.send(book);
+  let booksList = getSimilarBooks(author);
+    if (booksList) {
+      res.send({"booksbyauthor":booksList});
     } else {
       res.status(404).json({ message: 'Book not found' });
     }
 });
 
-public_users.get('/author-2/:author',function (req, res) {
-  new Promise((resolve, reject) => {
+public_users.get('/author-2/:author',function  (req, res) {
+  new Promise(async (resolve, reject) => {
     const author = req.params.author;
-    const filteredBooks = Object.keys(books).filter((key) => books[key].author === author);
-    const book = books[filteredBooks];  
-    resolve(book);
+    let booksList = await getSimilarBooks(author);
+     resolve({"booksbyauthor":booksList});
   })
     .then((result) => {
       res.send(result);
@@ -85,22 +106,20 @@ public_users.get('/author-2/:author',function (req, res) {
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
   const title = req.params.title;
-  const filteredBooks = Object.keys(books).filter((key) => books[key].title === title);
-  const book = books[filteredBooks];  
-    if (book) {
-      res.send(book);
-    } else {
-      res.status(404).json({ message: 'Book not found' });
-    }
+  let booksList = getSimilarBooks(null,title);
+  if (booksList) {
+    res.send({"booksbytitle":booksList});
+  } else {
+    res.status(404).json({ message: 'Book not found' });
+  }
 });
 
 
 public_users.get('/title-2/:title',function (req, res) {
-  new Promise((resolve, reject) => {
+  new Promise(async (resolve, reject) => {
     const title = req.params.title;
-    const filteredBooks = Object.keys(books).filter((key) => books[key].title === title);
-    const book = books[filteredBooks];  
-    resolve(book);
+    let booksList = await getSimilarBooks(null,title);
+     resolve({"booksbytitle":booksList});
   })
     .then((result) => {
       res.send(result);
